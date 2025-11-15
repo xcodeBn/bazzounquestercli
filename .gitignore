@@ -1,0 +1,25 @@
+# Rust
+/target
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Debug
+*.pdb
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Backup files
+*.bak
+*.tmp
+/.claude/
