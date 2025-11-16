@@ -11,8 +11,7 @@ impl Help {
         println!();
         println!(
             "{}",
-            "╔═══════════════════════════════════════════════════════════════╗"
-                .bright_white()
+            "╔═══════════════════════════════════════════════════════════════╗".bright_white()
         );
         println!(
             "{}",
@@ -22,8 +21,7 @@ impl Help {
         );
         println!(
             "{}",
-            "╚═══════════════════════════════════════════════════════════════╝"
-                .bright_white()
+            "╚═══════════════════════════════════════════════════════════════╝".bright_white()
         );
         println!();
         println!("{}", "HTTP Methods:".bright_white().bold());
@@ -37,29 +35,26 @@ impl Help {
         println!();
         println!("  {} <url> [options]", "post".green().bold());
         println!(
-            "    Options: {} \"Header:Value\"  {} \"key=value\"  {} '{}'",
+            "    Options: {} \"Header:Value\"  {} \"key=value\"  {} '{{\"key\":\"value\"}}'",
             "-H".yellow(),
             "-q".yellow(),
-            "-b".yellow(),
-            "{\"key\":\"value\"}"
+            "-b".yellow()
         );
         println!();
         println!("  {} <url> [options]", "put".green().bold());
         println!(
-            "    Options: {} \"Header:Value\"  {} \"key=value\"  {} '{}'",
+            "    Options: {} \"Header:Value\"  {} \"key=value\"  {} '{{\"key\":\"value\"}}'",
             "-H".yellow(),
             "-q".yellow(),
-            "-b".yellow(),
-            "{\"key\":\"value\"}"
+            "-b".yellow()
         );
         println!();
         println!("  {} <url> [options]", "patch".green().bold());
         println!(
-            "    Options: {} \"Header:Value\"  {} \"key=value\"  {} '{}'",
+            "    Options: {} \"Header:Value\"  {} \"key=value\"  {} '{{\"key\":\"value\"}}'",
             "-H".yellow(),
             "-q".yellow(),
-            "-b".yellow(),
-            "{\"key\":\"value\"}"
+            "-b".yellow()
         );
         println!();
         println!("  {} <url> [options]", "delete".green().bold());

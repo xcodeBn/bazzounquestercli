@@ -1,8 +1,8 @@
 //! HTTP response handling and formatting
 
 use crate::error::Result;
-use reqwest::StatusCode;
 use reqwest::header::HeaderMap;
+use reqwest::StatusCode;
 use std::time::Duration;
 
 /// Represents an HTTP response
@@ -103,11 +103,7 @@ impl ResponseFormatter {
         ));
 
         // Duration
-        output.push_str(&format!(
-            "{} {:.2?}\n\n",
-            "Time:".bold(),
-            response.duration
-        ));
+        output.push_str(&format!("{} {:.2?}\n\n", "Time:".bold(), response.duration));
 
         // Headers
         if !response.headers.is_empty() {

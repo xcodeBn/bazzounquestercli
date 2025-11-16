@@ -248,7 +248,8 @@ mod tests {
 
     #[test]
     fn test_request_log_with_body() {
-        let mut request = RequestLog::new("POST".to_string(), "https://api.example.com".to_string());
+        let mut request =
+            RequestLog::new("POST".to_string(), "https://api.example.com".to_string());
         request.body = Some(r#"{"key":"value"}"#.to_string());
         request.calculate_body_size();
 

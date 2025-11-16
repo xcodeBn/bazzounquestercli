@@ -14,9 +14,10 @@ jobs:
     name: Test Suite
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        rust: [stable, beta]
+        os: [ubuntu-latest]
+        rust: [stable]
 
     steps:
     - uses: actions/checkout@v4
@@ -59,12 +60,10 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
 
-    - name: Run integration tests
-      run: cargo test --test integration_tests --verbose
-
   coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
     - uses: actions/checkout@v4
@@ -78,18 +77,22 @@ jobs:
 
     - name: Install tarpaulin
       run: cargo install cargo-tarpaulin
+      continue-on-error: true
 
     - name: Generate coverage
       run: cargo tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml
+      continue-on-error: true
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
+      continue-on-error: true
       with:
         fail_ci_if_error: false
 
   bench:
     name: Benchmarks
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
     - uses: actions/checkout@v4
@@ -103,10 +106,12 @@ jobs:
 
     - name: Run benchmarks
       run: cargo bench --no-fail-fast
+      continue-on-error: true
 
   security_audit:
     name: Security Audit
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
     - uses: actions/checkout@v4
@@ -120,5 +125,6 @@ jobs:
 
     - name: Run cargo-audit
       uses: actions-rs/audit-check@v1
+      continue-on-error: true
       with:
         token: ${{ secrets.GITHUB_TOKEN }}

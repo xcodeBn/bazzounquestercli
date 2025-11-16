@@ -205,8 +205,8 @@ mod tests {
 
     #[test]
     fn test_oauth2_token_with_expiration() {
-        let token = OAuth2Token::new("token".to_string(), "Bearer".to_string())
-            .with_expiration(3600);
+        let token =
+            OAuth2Token::new("token".to_string(), "Bearer".to_string()).with_expiration(3600);
 
         assert!(!token.is_expired());
         assert!(!token.needs_refresh());
@@ -256,10 +256,7 @@ mod tests {
             .with_auth_url("https://auth.example.com".to_string())
             .with_token_url("https://token.example.com".to_string());
 
-        assert_eq!(
-            auth.auth_url,
-            Some("https://auth.example.com".to_string())
-        );
+        assert_eq!(auth.auth_url, Some("https://auth.example.com".to_string()));
         assert_eq!(
             auth.token_url,
             Some("https://token.example.com".to_string())
@@ -269,8 +266,8 @@ mod tests {
     #[test]
     fn test_oauth2_auth_apply_to_headers() {
         let token = OAuth2Token::new("testtoken".to_string(), "Bearer".to_string());
-        let auth = OAuth2Auth::new(GrantType::ClientCredentials, "client".to_string())
-            .with_token(token);
+        let auth =
+            OAuth2Auth::new(GrantType::ClientCredentials, "client".to_string()).with_token(token);
 
         let mut headers = Vec::new();
         auth.apply_to_headers(&mut headers);
@@ -281,11 +278,11 @@ mod tests {
 
     #[test]
     fn test_oauth2_auth_is_valid() {
-        let token = OAuth2Token::new("token".to_string(), "Bearer".to_string())
-            .with_expiration(3600);
+        let token =
+            OAuth2Token::new("token".to_string(), "Bearer".to_string()).with_expiration(3600);
 
-        let auth = OAuth2Auth::new(GrantType::ClientCredentials, "client".to_string())
-            .with_token(token);
+        let auth =
+            OAuth2Auth::new(GrantType::ClientCredentials, "client".to_string()).with_token(token);
 
         assert!(auth.is_valid());
     }
@@ -298,7 +295,7 @@ mod tests {
 
     #[test]
     fn test_oauth2_grant_types() {
-        let types = vec![
+        let types = [
             GrantType::AuthorizationCode,
             GrantType::ClientCredentials,
             GrantType::Password,

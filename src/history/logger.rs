@@ -46,28 +46,24 @@ impl HistoryLogger {
 
     /// Log a request (before sending)
     pub fn log_request(&mut self, request: &RequestBuilder) -> Uuid {
-        let mut request_log = RequestLog::new(
-            request.method.as_str().to_string(),
-            request.url.clone(),
-        );
+        let mut request_log =
+            RequestLog::new(request.method.as_str().to_string(), request.url.clone());
 
         // Parse headers
         for header in &request.headers {
             if let Some((key, value)) = header.split_once(':') {
-                request_log.headers.insert(
-                    key.trim().to_string(),
-                    value.trim().to_string(),
-                );
+                request_log
+                    .headers
+                    .insert(key.trim().to_string(), value.trim().to_string());
             }
         }
 
         // Parse query params
         for param in &request.query_params {
             if let Some((key, value)) = param.split_once('=') {
-                request_log.query_params.insert(
-                    key.to_string(),
-                    value.to_string(),
-                );
+                request_log
+                    .query_params
+                    .insert(key.to_string(), value.to_string());
             }
         }
 
@@ -99,7 +95,9 @@ impl HistoryLogger {
         if let Some(entry) = self.entries.iter_mut().find(|e| e.id == *entry_id) {
             let mut response_log = ResponseLog::new(
                 response.status.as_u16(),
-                response.status.canonical_reason()
+                response
+                    .status
+                    .canonical_reason()
                     .unwrap_or("Unknown")
                     .to_string(),
             );
@@ -226,10 +224,7 @@ mod tests {
     #[test]
     fn test_log_request() {
         let mut logger = HistoryLogger::new();
-        let request = RequestBuilder::new(
-            HttpMethod::Get,
-            "https://api.example.com".to_string(),
-        );
+        let request = RequestBuilder::new(HttpMethod::Get, "https://api.example.com".to_string());
 
         let id = logger.log_request(&request);
         assert_eq!(logger.count(), 1);
@@ -261,9 +256,18 @@ mod tests {
     fn test_filter_by_method() {
         let mut logger = HistoryLogger::new();
 
-        logger.log_request(&RequestBuilder::new(HttpMethod::Get, "https://example.com/1".to_string()));
-        logger.log_request(&RequestBuilder::new(HttpMethod::Post, "https://example.com/2".to_string()));
-        logger.log_request(&RequestBuilder::new(HttpMethod::Get, "https://example.com/3".to_string()));
+        logger.log_request(&RequestBuilder::new(
+            HttpMethod::Get,
+            "https://example.com/1".to_string(),
+        ));
+        logger.log_request(&RequestBuilder::new(
+            HttpMethod::Post,
+            "https://example.com/2".to_string(),
+        ));
+        logger.log_request(&RequestBuilder::new(
+            HttpMethod::Get,
+            "https://example.com/3".to_string(),
+        ));
 
         let get_requests = logger.filter_by_method("GET");
         assert_eq!(get_requests.len(), 2);
@@ -276,8 +280,14 @@ mod tests {
     fn test_search_by_url() {
         let mut logger = HistoryLogger::new();
 
-        logger.log_request(&RequestBuilder::new(HttpMethod::Get, "https://api.example.com/users".to_string()));
-        logger.log_request(&RequestBuilder::new(HttpMethod::Get, "https://api.example.com/posts".to_string()));
+        logger.log_request(&RequestBuilder::new(
+            HttpMethod::Get,
+            "https://api.example.com/users".to_string(),
+        ));
+        logger.log_request(&RequestBuilder::new(
+            HttpMethod::Get,
+            "https://api.example.com/posts".to_string(),
+        ));
 
         let results = logger.search_by_url("users");
         assert_eq!(results.len(), 1);
@@ -289,7 +299,10 @@ mod tests {
     #[test]
     fn test_clear() {
         let mut logger = HistoryLogger::new();
-        logger.log_request(&RequestBuilder::new(HttpMethod::Get, "https://example.com".to_string()));
+        logger.log_request(&RequestBuilder::new(
+            HttpMethod::Get,
+            "https://example.com".to_string(),
+        ));
 
         assert_eq!(logger.count(), 1);
         logger.clear();

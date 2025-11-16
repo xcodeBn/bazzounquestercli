@@ -24,7 +24,7 @@ impl CommandParser {
         }
 
         let url = args[0].clone();
-        let http_method = HttpMethod::from_str(method)?;
+        let http_method = HttpMethod::parse(method)?;
         let mut builder = RequestBuilder::new(http_method, url);
 
         let mut i = 1;
@@ -35,7 +35,9 @@ impl CommandParser {
                         builder = builder.header(args[i + 1].clone());
                         i += 2;
                     } else {
-                        return Err(Error::MissingArgument("Missing value for -H flag".to_string()));
+                        return Err(Error::MissingArgument(
+                            "Missing value for -H flag".to_string(),
+                        ));
                     }
                 }
                 "-q" | "--query" => {
@@ -43,7 +45,9 @@ impl CommandParser {
                         builder = builder.query(args[i + 1].clone());
                         i += 2;
                     } else {
-                        return Err(Error::MissingArgument("Missing value for -q flag".to_string()));
+                        return Err(Error::MissingArgument(
+                            "Missing value for -q flag".to_string(),
+                        ));
                     }
                 }
                 "-b" | "--body" => {
@@ -51,7 +55,9 @@ impl CommandParser {
                         builder = builder.body(args[i + 1].clone());
                         i += 2;
                     } else {
-                        return Err(Error::MissingArgument("Missing value for -b flag".to_string()));
+                        return Err(Error::MissingArgument(
+                            "Missing value for -b flag".to_string(),
+                        ));
                     }
                 }
                 _ => {
@@ -79,7 +85,10 @@ mod tests {
 
     #[test]
     fn test_parse_line_with_quotes() {
-        let result = CommandParser::parse_line(r#"post https://example.com -H "Content-Type:application/json""#).unwrap();
+        let result = CommandParser::parse_line(
+            r#"post https://example.com -H "Content-Type:application/json""#,
+        )
+        .unwrap();
         assert_eq!(result.len(), 4);
         assert_eq!(result[3], "Content-Type:application/json");
     }

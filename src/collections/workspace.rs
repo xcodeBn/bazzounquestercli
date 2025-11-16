@@ -65,7 +65,11 @@ impl Workspace {
 
     /// Remove a collection from this workspace
     pub fn remove_collection(&mut self, collection_id: &Uuid) -> bool {
-        if let Some(pos) = self.collection_ids.iter().position(|id| id == collection_id) {
+        if let Some(pos) = self
+            .collection_ids
+            .iter()
+            .position(|id| id == collection_id)
+        {
             self.collection_ids.remove(pos);
             self.updated_at = Utc::now();
             true
@@ -100,13 +104,14 @@ impl WorkspaceStorage {
 
     /// Get default storage path
     pub fn default_path() -> crate::Result<PathBuf> {
-        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester")
-            .ok_or_else(|| {
+        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester").ok_or_else(
+            || {
                 crate::Error::Io(std::io::Error::new(
                     std::io::ErrorKind::NotFound,
                     "Could not determine data directory",
                 ))
-            })?;
+            },
+        )?;
 
         let path = dirs.data_dir().join("workspaces");
         Ok(path)

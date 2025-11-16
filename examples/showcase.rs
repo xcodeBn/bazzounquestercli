@@ -4,7 +4,7 @@ use bazzounquester::{
     auth::{AuthScheme, BearerAuth},
     http::{HttpClient, HttpMethod, RequestBuilder},
     scripts::{Script, ScriptContext, ScriptType},
-    workflow::{RequestChain, WorkflowStep, execute_chain},
+    workflow::{execute_chain, RequestChain, WorkflowStep},
 };
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -35,10 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn simple_request() -> Result<(), Box<dyn std::error::Error>> {
-    let request = RequestBuilder::new(
-        HttpMethod::Get,
-        "https://httpbin.org/uuid".to_string()
-    );
+    let request = RequestBuilder::new(HttpMethod::Get, "https://httpbin.org/uuid".to_string());
 
     let client = HttpClient::new();
     let response = client.execute(&request)?;
@@ -51,10 +48,8 @@ fn simple_request() -> Result<(), Box<dyn std::error::Error>> {
 fn auth_request() -> Result<(), Box<dyn std::error::Error>> {
     let auth = AuthScheme::Bearer(BearerAuth::new("test-token-123".to_string()));
 
-    let request = RequestBuilder::new(
-        HttpMethod::Get,
-        "https://httpbin.org/bearer".to_string()
-    ).auth(auth);
+    let request =
+        RequestBuilder::new(HttpMethod::Get, "https://httpbin.org/bearer".to_string()).auth(auth);
 
     let client = HttpClient::new();
     let response = client.execute(&request)?;
@@ -70,7 +65,8 @@ fn script_example() -> Result<(), Box<dyn std::error::Error>> {
         r#"
         let timestamp = "1234567890";
         log("Setting timestamp: " + timestamp);
-        "#.to_string()
+        "#
+        .to_string(),
     );
 
     let mut context = ScriptContext::new();
@@ -84,7 +80,7 @@ fn script_example() -> Result<(), Box<dyn std::error::Error>> {
 fn assertion_example() -> Result<(), Box<dyn std::error::Error>> {
     let request = RequestBuilder::new(
         HttpMethod::Get,
-        "https://httpbin.org/status/200".to_string()
+        "https://httpbin.org/status/200".to_string(),
     );
 
     let client = HttpClient::new();
@@ -102,20 +98,16 @@ fn assertion_example() -> Result<(), Box<dyn std::error::Error>> {
 
 fn workflow_example() -> Result<(), Box<dyn std::error::Error>> {
     let chain = RequestChain::new("Test Workflow".to_string())
-        .add_step(
-            WorkflowStep::new(
-                "Get UUID".to_string(),
-                HttpMethod::Get,
-                "https://httpbin.org/uuid".to_string()
-            )
-        )
-        .add_step(
-            WorkflowStep::new(
-                "Get JSON".to_string(),
-                HttpMethod::Get,
-                "https://httpbin.org/json".to_string()
-            )
-        );
+        .add_step(WorkflowStep::new(
+            "Get UUID".to_string(),
+            HttpMethod::Get,
+            "https://httpbin.org/uuid".to_string(),
+        ))
+        .add_step(WorkflowStep::new(
+            "Get JSON".to_string(),
+            HttpMethod::Get,
+            "https://httpbin.org/json".to_string(),
+        ));
 
     let result = execute_chain(&chain)?;
     println!("   {}", result.summary());

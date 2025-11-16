@@ -1,21 +1,22 @@
 //! Authentication helpers for various auth schemes
 
+pub mod api_key;
 pub mod basic;
 pub mod bearer;
-pub mod api_key;
 pub mod oauth2;
 
+pub use api_key::ApiKeyAuth;
 pub use basic::BasicAuth;
 pub use bearer::BearerAuth;
-pub use api_key::ApiKeyAuth;
 pub use oauth2::OAuth2Auth;
 
 use serde::{Deserialize, Serialize};
 
 /// Authentication scheme types
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub enum AuthScheme {
     /// No authentication
+    #[default]
     None,
 
     /// Basic authentication (username/password)
@@ -46,12 +47,6 @@ impl AuthScheme {
     /// Check if authentication is configured
     pub fn is_configured(&self) -> bool {
         !matches!(self, AuthScheme::None)
-    }
-}
-
-impl Default for AuthScheme {
-    fn default() -> Self {
-        AuthScheme::None
     }
 }
 

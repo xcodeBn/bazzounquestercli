@@ -1,6 +1,6 @@
 //! Assertion definitions and results
 
-use crate::assertions::matcher::{Matcher, MatcherType};
+use crate::assertions::matcher::Matcher;
 use serde::{Deserialize, Serialize};
 
 /// Type of assertion
@@ -122,12 +122,7 @@ impl AssertionResult {
     }
 
     /// Create a failing result
-    pub fn fail(
-        assertion: Assertion,
-        actual: String,
-        expected: String,
-        error: String,
-    ) -> Self {
+    pub fn fail(assertion: Assertion, actual: String, expected: String, error: String) -> Self {
         Self {
             assertion,
             passed: false,
@@ -139,12 +134,7 @@ impl AssertionResult {
 
     /// Get a summary of the result
     pub fn summary(&self) -> String {
-        let desc = self
-            .assertion
-            .description
-            .as_ref()
-            .map(|d| d.as_str())
-            .unwrap_or("Assertion");
+        let desc = self.assertion.description.as_deref().unwrap_or("Assertion");
 
         if self.passed {
             format!("✓ {}: PASS", desc)
@@ -271,8 +261,8 @@ mod tests {
 
     #[test]
     fn test_assertion_serialization() {
-        let assertion = Assertion::status_code(Matcher::equals(200))
-            .with_description("Test".to_string());
+        let assertion =
+            Assertion::status_code(Matcher::equals(200)).with_description("Test".to_string());
 
         let json = serde_json::to_string(&assertion).unwrap();
         let deserialized: Assertion = serde_json::from_str(&json).unwrap();

@@ -22,13 +22,10 @@ fn benchmark_request_builder(c: &mut Criterion) {
 fn benchmark_header_parsing(c: &mut Criterion) {
     c.bench_function("parse_headers", |b| {
         b.iter(|| {
-            let request = RequestBuilder::new(
-                HttpMethod::Get,
-                "https://example.com".to_string(),
-            )
-            .header("Content-Type:application/json".to_string())
-            .header("Authorization:Bearer token123".to_string())
-            .header("X-Custom-Header:value".to_string());
+            let request = RequestBuilder::new(HttpMethod::Get, "https://example.com".to_string())
+                .header("Content-Type:application/json".to_string())
+                .header("Authorization:Bearer token123".to_string())
+                .header("X-Custom-Header:value".to_string());
 
             black_box(request.parse_headers())
         });
@@ -38,13 +35,10 @@ fn benchmark_header_parsing(c: &mut Criterion) {
 fn benchmark_query_param_parsing(c: &mut Criterion) {
     c.bench_function("parse_query_params", |b| {
         b.iter(|| {
-            let request = RequestBuilder::new(
-                HttpMethod::Get,
-                "https://example.com".to_string(),
-            )
-            .query("foo=bar".to_string())
-            .query("baz=qux".to_string())
-            .query("test=value".to_string());
+            let request = RequestBuilder::new(HttpMethod::Get, "https://example.com".to_string())
+                .query("foo=bar".to_string())
+                .query("baz=qux".to_string())
+                .query("test=value".to_string());
 
             black_box(request.parse_query_params())
         });
@@ -54,11 +48,10 @@ fn benchmark_query_param_parsing(c: &mut Criterion) {
 fn benchmark_json_parsing(c: &mut Criterion) {
     c.bench_function("parse_json_body", |b| {
         b.iter(|| {
-            let request = RequestBuilder::new(
-                HttpMethod::Post,
-                "https://example.com".to_string(),
-            )
-            .body(black_box(r#"{"key":"value","nested":{"data":true}}"#.to_string()));
+            let request = RequestBuilder::new(HttpMethod::Post, "https://example.com".to_string())
+                .body(black_box(
+                    r#"{"key":"value","nested":{"data":true}}"#.to_string(),
+                ));
 
             black_box(request.parse_body())
         });
@@ -68,10 +61,10 @@ fn benchmark_json_parsing(c: &mut Criterion) {
 fn benchmark_http_method_from_str(c: &mut Criterion) {
     c.bench_function("http_method_from_str", |b| {
         b.iter(|| {
-            black_box(HttpMethod::from_str(black_box("GET")));
-            black_box(HttpMethod::from_str(black_box("POST")));
-            black_box(HttpMethod::from_str(black_box("PUT")));
-            black_box(HttpMethod::from_str(black_box("DELETE")));
+            black_box(HttpMethod::parse(black_box("GET")));
+            black_box(HttpMethod::parse(black_box("POST")));
+            black_box(HttpMethod::parse(black_box("PUT")));
+            black_box(HttpMethod::parse(black_box("DELETE")));
         });
     });
 }

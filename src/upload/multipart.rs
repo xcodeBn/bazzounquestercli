@@ -207,7 +207,10 @@ mod tests {
 
         let mut form = FormData::new();
         form.add_text("name".to_string(), "value".to_string());
-        form.add_file("file".to_string(), temp_file.path().to_str().unwrap().to_string());
+        form.add_file(
+            "file".to_string(),
+            temp_file.path().to_str().unwrap().to_string(),
+        );
 
         let builder = MultipartBuilder::from_form_data(&form).unwrap();
         assert_eq!(builder.text_fields.len(), 1);

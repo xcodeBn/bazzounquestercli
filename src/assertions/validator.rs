@@ -52,10 +52,7 @@ impl ValidationReport {
         if self.success {
             format!("✓ All {} assertions passed", self.total)
         } else {
-            format!(
-                "✗ {} of {} assertions failed",
-                self.failed, self.total
-            )
+            format!("✗ {} of {} assertions failed", self.failed, self.total)
         }
     }
 
@@ -89,11 +86,7 @@ impl ResponseValidator {
     }
 
     /// Validate a response against assertions
-    pub fn validate(
-        &self,
-        response: &HttpResponse,
-        assertions: &[Assertion],
-    ) -> ValidationReport {
+    pub fn validate(&self, response: &HttpResponse, assertions: &[Assertion]) -> ValidationReport {
         let mut report = ValidationReport::new();
 
         for assertion in assertions {
@@ -175,11 +168,7 @@ impl ResponseValidator {
     }
 
     /// Validate body
-    fn validate_body(
-        &self,
-        response: &HttpResponse,
-        assertion: &Assertion,
-    ) -> AssertionResult {
+    fn validate_body(&self, response: &HttpResponse, assertion: &Assertion) -> AssertionResult {
         let actual = &response.body;
         let expected = assertion.matcher.description();
 
@@ -398,8 +387,10 @@ mod tests {
     fn test_validator_header_pass() {
         let validator = ResponseValidator::new();
         let response = create_mock_response();
-        let assertion =
-            Assertion::header("Content-Type".to_string(), Matcher::contains("json".to_string()));
+        let assertion = Assertion::header(
+            "Content-Type".to_string(),
+            Matcher::contains("json".to_string()),
+        );
 
         let result = validator.validate_assertion(&response, &assertion);
         assert!(result.passed);
@@ -409,8 +400,10 @@ mod tests {
     fn test_validator_header_fail() {
         let validator = ResponseValidator::new();
         let response = create_mock_response();
-        let assertion =
-            Assertion::header("Content-Type".to_string(), Matcher::contains("xml".to_string()));
+        let assertion = Assertion::header(
+            "Content-Type".to_string(),
+            Matcher::contains("xml".to_string()),
+        );
 
         let result = validator.validate_assertion(&response, &assertion);
         assert!(!result.passed);
@@ -440,8 +433,7 @@ mod tests {
     fn test_validator_json_path_pass() {
         let validator = ResponseValidator::new();
         let response = create_mock_response();
-        let assertion =
-            Assertion::json_path("$.status".to_string(), Matcher::equals_str("ok"));
+        let assertion = Assertion::json_path("$.status".to_string(), Matcher::equals_str("ok"));
 
         let result = validator.validate_assertion(&response, &assertion);
         assert!(result.passed);
@@ -464,7 +456,10 @@ mod tests {
 
         let assertions = vec![
             Assertion::status_code(Matcher::equals(200)),
-            Assertion::header("Content-Type".to_string(), Matcher::contains("json".to_string())),
+            Assertion::header(
+                "Content-Type".to_string(),
+                Matcher::contains("json".to_string()),
+            ),
             Assertion::body(Matcher::contains("ok".to_string())),
             Assertion::response_time(Matcher::less_than(1000)),
         ];

@@ -67,16 +67,18 @@ impl HttpClient {
                 let multipart_body = multipart_builder.build()?;
                 let content_type = multipart_builder.content_type();
 
-                req = req.header(reqwest::header::CONTENT_TYPE, content_type)
+                req = req
+                    .header(reqwest::header::CONTENT_TYPE, content_type)
                     .body(multipart_body);
             } else {
                 // Use application/x-www-form-urlencoded for text-only forms
                 let encoded = form_data.to_urlencoded();
-                req = req.header(
-                    reqwest::header::CONTENT_TYPE,
-                    "application/x-www-form-urlencoded",
-                )
-                .body(encoded);
+                req = req
+                    .header(
+                        reqwest::header::CONTENT_TYPE,
+                        "application/x-www-form-urlencoded",
+                    )
+                    .body(encoded);
             }
         } else if let Some(body_str) = request.get_raw_body() {
             // Add body if present and no form data

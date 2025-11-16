@@ -28,7 +28,10 @@ impl ScriptEngine {
             }
         });
 
-        Self { engine, console_logs }
+        Self {
+            engine,
+            console_logs,
+        }
     }
 
     /// Execute a script
@@ -65,11 +68,10 @@ impl ScriptEngine {
         scope.push_constant("response", res_map);
 
         // Execute script
-        self.engine
+        let _ = self
+            .engine
             .eval_with_scope::<Dynamic>(&mut scope, &script.code)
-            .map_err(|e| {
-                Error::InvalidCommand(format!("Script execution error: {}", e))
-            })?;
+            .map_err(|e| Error::InvalidCommand(format!("Script execution error: {}", e)))?;
 
         // Extract modified variables back to context
         // Clear existing variables
@@ -143,10 +145,7 @@ mod tests {
         let mut context = ScriptContext::new();
         context.set_variable("existing".to_string(), "hello".to_string());
 
-        let script = Script::new(
-            ScriptType::PreRequest,
-            "let copy = existing;".to_string(),
-        );
+        let script = Script::new(ScriptType::PreRequest, "let copy = existing;".to_string());
 
         engine.execute(&script, &mut context).unwrap();
         assert_eq!(context.get_variable_value("copy"), Some("hello"));
