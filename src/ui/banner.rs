@@ -37,17 +37,16 @@ impl Banner {
                 .bold()
         );
         println!();
-        println!("  {} v{}", "Version:".bright_black(), VERSION.bright_white());
         println!(
-            "  {} {}",
-            "Author:".bright_black(),
-            AUTHOR.bright_white()
+            "  {} v{}",
+            "Version:".bright_black(),
+            VERSION.bright_white()
         );
+        println!("  {} {}", "Author:".bright_black(), AUTHOR.bright_white());
         println!();
         println!(
             "{}",
-            "  Type 'help' for commands | 'version' for info | 'exit' to quit"
-                .bright_black()
+            "  Type 'help' for commands | 'version' for info | 'exit' to quit".bright_black()
         );
         println!();
     }
@@ -69,21 +68,13 @@ impl Banner {
             "╚═══════════════════════════════════════════════════════════════╝".cyan()
         );
         println!();
-        println!(
-            "  {} {}",
-            "Author:".bright_black(),
-            AUTHOR.bright_white()
-        );
+        println!("  {} {}", "Author:".bright_black(), AUTHOR.bright_white());
         println!(
             "  {} {}",
             "Description:".bright_black(),
             "HTTP request CLI tool with interactive mode".bright_white()
         );
-        println!(
-            "  {} {}",
-            "License:".bright_black(),
-            "MIT".bright_white()
-        );
+        println!("  {} {}", "License:".bright_black(), "MIT".bright_white());
         println!();
         println!(
             "  {} A powerful tool to make HTTP requests from your terminal",

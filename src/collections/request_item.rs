@@ -122,7 +122,7 @@ impl RequestItem {
 
     /// Convert to HTTP request builder
     pub fn to_request_builder(&self) -> crate::http::RequestBuilder {
-        let method = HttpMethod::from_str(&self.method).unwrap_or(HttpMethod::Get);
+        let method = HttpMethod::parse(&self.method).unwrap_or(HttpMethod::Get);
         let mut builder = crate::http::RequestBuilder::new(method, self.url.clone());
 
         // Add headers

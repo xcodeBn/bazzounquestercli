@@ -21,7 +21,10 @@ impl BasicAuth {
     /// Encode credentials to base64
     pub fn encode(&self) -> String {
         let credentials = format!("{}:{}", self.username, self.password);
-        base64::Engine::encode(&base64::engine::general_purpose::STANDARD, credentials.as_bytes())
+        base64::Engine::encode(
+            &base64::engine::general_purpose::STANDARD,
+            credentials.as_bytes(),
+        )
     }
 
     /// Apply to headers

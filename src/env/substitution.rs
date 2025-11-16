@@ -12,7 +12,7 @@ impl VariableSubstitutor {
     /// Create a new substitution engine
     pub fn new() -> Self {
         // Matches {{VARIABLE_NAME}} pattern
-        let pattern = Regex::new(r"\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}").unwrap();
+        let pattern = Regex::new(r"\{\{([A-Za-z_][A-Za-z0-9_]*)}}").unwrap();
         Self { pattern }
     }
 
@@ -127,8 +127,7 @@ mod tests {
         let mut vars = HashMap::new();
         vars.insert("API_URL", "https://api.example.com");
 
-        let result =
-            sub.substitute_with_default("{{API_URL}}/{{MISSING}}/users", &vars, "unknown");
+        let result = sub.substitute_with_default("{{API_URL}}/{{MISSING}}/users", &vars, "unknown");
         assert_eq!(result, "https://api.example.com/unknown/users");
     }
 
@@ -221,6 +220,9 @@ mod tests {
 
         let text = r#"{"url":"{{BASE}}/auth","key":"{{KEY}}"}"#;
         let result = sub.substitute(text, &vars);
-        assert_eq!(result, r#"{"url":"https://api.example.com/auth","key":"abc123"}"#);
+        assert_eq!(
+            result,
+            r#"{"url":"https://api.example.com/auth","key":"abc123"}"#
+        );
     }
 }

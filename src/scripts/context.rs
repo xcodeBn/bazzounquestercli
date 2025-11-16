@@ -201,7 +201,10 @@ mod tests {
         context.set_request_data("url".to_string(), "https://api.example.com".to_string());
 
         assert_eq!(context.get_request_data("method"), Some("GET"));
-        assert_eq!(context.get_request_data("url"), Some("https://api.example.com"));
+        assert_eq!(
+            context.get_request_data("url"),
+            Some("https://api.example.com")
+        );
     }
 
     #[test]
@@ -211,7 +214,10 @@ mod tests {
         context.set_response_data("body".to_string(), r#"{"result":"ok"}"#.to_string());
 
         assert_eq!(context.get_response_data("status"), Some("200"));
-        assert_eq!(context.get_response_data("body"), Some(r#"{"result":"ok"}"#));
+        assert_eq!(
+            context.get_response_data("body"),
+            Some(r#"{"result":"ok"}"#)
+        );
     }
 
     #[test]

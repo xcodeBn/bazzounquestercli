@@ -19,13 +19,14 @@ impl HistoryStorage {
 
     /// Get default storage path
     pub fn default_path() -> crate::Result<PathBuf> {
-        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester")
-            .ok_or_else(|| {
+        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester").ok_or_else(
+            || {
                 crate::Error::Io(std::io::Error::new(
                     std::io::ErrorKind::NotFound,
                     "Could not determine data directory",
                 ))
-            })?;
+            },
+        )?;
 
         let path = dirs.data_dir().join("history");
         Ok(path)
@@ -206,8 +207,14 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let storage = HistoryStorage::new(temp_dir.path().to_path_buf()).unwrap();
 
-        let entry1 = HistoryEntry::new(RequestLog::new("GET".to_string(), "https://example.com/1".to_string()));
-        let entry2 = HistoryEntry::new(RequestLog::new("POST".to_string(), "https://example.com/2".to_string()));
+        let entry1 = HistoryEntry::new(RequestLog::new(
+            "GET".to_string(),
+            "https://example.com/1".to_string(),
+        ));
+        let entry2 = HistoryEntry::new(RequestLog::new(
+            "POST".to_string(),
+            "https://example.com/2".to_string(),
+        ));
 
         storage.save_entry(&entry1).unwrap();
         storage.save_entry(&entry2).unwrap();
@@ -221,7 +228,10 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let storage = HistoryStorage::new(temp_dir.path().to_path_buf()).unwrap();
 
-        let entry = HistoryEntry::new(RequestLog::new("GET".to_string(), "https://example.com".to_string()));
+        let entry = HistoryEntry::new(RequestLog::new(
+            "GET".to_string(),
+            "https://example.com".to_string(),
+        ));
         let id = entry.id;
 
         storage.save_entry(&entry).unwrap();
@@ -236,8 +246,18 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let storage = HistoryStorage::new(temp_dir.path().to_path_buf()).unwrap();
 
-        storage.save_entry(&HistoryEntry::new(RequestLog::new("GET".to_string(), "https://example.com/1".to_string()))).unwrap();
-        storage.save_entry(&HistoryEntry::new(RequestLog::new("GET".to_string(), "https://example.com/2".to_string()))).unwrap();
+        storage
+            .save_entry(&HistoryEntry::new(RequestLog::new(
+                "GET".to_string(),
+                "https://example.com/1".to_string(),
+            )))
+            .unwrap();
+        storage
+            .save_entry(&HistoryEntry::new(RequestLog::new(
+                "GET".to_string(),
+                "https://example.com/2".to_string(),
+            )))
+            .unwrap();
 
         let deleted = storage.clear_all().unwrap();
         assert_eq!(deleted, 2);
@@ -249,8 +269,18 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let storage = HistoryStorage::new(temp_dir.path().to_path_buf()).unwrap();
 
-        storage.save_entry(&HistoryEntry::new(RequestLog::new("GET".to_string(), "https://example.com/1".to_string()))).unwrap();
-        storage.save_entry(&HistoryEntry::new(RequestLog::new("POST".to_string(), "https://example.com/2".to_string()))).unwrap();
+        storage
+            .save_entry(&HistoryEntry::new(RequestLog::new(
+                "GET".to_string(),
+                "https://example.com/1".to_string(),
+            )))
+            .unwrap();
+        storage
+            .save_entry(&HistoryEntry::new(RequestLog::new(
+                "POST".to_string(),
+                "https://example.com/2".to_string(),
+            )))
+            .unwrap();
 
         // Export to a file
         let export_path = temp_dir.path().join("export.json");
@@ -274,7 +304,12 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let storage = HistoryStorage::new(temp_dir.path().to_path_buf()).unwrap();
 
-        storage.save_entry(&HistoryEntry::new(RequestLog::new("GET".to_string(), "https://example.com".to_string()))).unwrap();
+        storage
+            .save_entry(&HistoryEntry::new(RequestLog::new(
+                "GET".to_string(),
+                "https://example.com".to_string(),
+            )))
+            .unwrap();
 
         let size = storage.storage_size().unwrap();
         assert!(size > 0);

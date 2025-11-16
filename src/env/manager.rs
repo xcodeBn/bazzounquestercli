@@ -28,13 +28,14 @@ impl EnvironmentManager {
 
     /// Get default storage path
     pub fn default_path() -> crate::Result<PathBuf> {
-        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester")
-            .ok_or_else(|| {
+        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester").ok_or_else(
+            || {
                 crate::Error::Io(std::io::Error::new(
                     std::io::ErrorKind::NotFound,
                     "Could not determine data directory",
                 ))
-            })?;
+            },
+        )?;
 
         let path = dirs.data_dir().join("environments");
         Ok(path)
@@ -96,8 +97,7 @@ impl EnvironmentManager {
 
     /// Get active environment
     pub fn get_active_environment(&self) -> Option<&Environment> {
-        self.active_env_id
-            .and_then(|id| self.environments.get(&id))
+        self.active_env_id.and_then(|id| self.environments.get(&id))
     }
 
     /// Get active environment ID

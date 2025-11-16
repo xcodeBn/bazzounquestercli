@@ -4,9 +4,9 @@ pub mod chain;
 pub mod executor;
 pub mod step;
 
-pub use chain::{RequestChain, ChainConfig};
-pub use executor::{WorkflowExecutor, ExecutionResult};
-pub use step::{WorkflowStep, StepResult};
+pub use chain::{ChainConfig, RequestChain};
+pub use executor::{ExecutionResult, WorkflowExecutor};
+pub use step::{StepResult, WorkflowStep};
 
 use crate::error::Result;
 
@@ -22,7 +22,8 @@ mod tests {
 
     #[test]
     fn test_workflow_module() {
-        // Basic module test
-        assert!(true);
+        // Basic module test - verify module can be imported
+        let chain = RequestChain::new("test".to_string());
+        assert_eq!(chain.name, "test");
     }
 }

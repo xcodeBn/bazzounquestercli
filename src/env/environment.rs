@@ -204,12 +204,8 @@ impl Environment {
 
     /// Export to different formats
     pub fn export_yaml(&self, path: &Path) -> crate::Result<()> {
-        let yaml = serde_yaml::to_string(self).map_err(|e| {
-            crate::Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string(),
-            ))
-        })?;
+        let yaml = serde_yaml::to_string(self)
+            .map_err(|e| crate::Error::Io(std::io::Error::other(e.to_string())))?;
         std::fs::write(path, yaml)?;
         Ok(())
     }
@@ -294,7 +290,7 @@ mod tests {
         let loaded = Environment::load_from_file(&file_path).unwrap();
         assert_eq!(loaded.name, "Test");
         assert_eq!(loaded.get_variable("KEY1"), Some("value1"));
-        assert_eq!(loaded.variables.get("SECRET").unwrap().is_secret, true);
+        assert!(loaded.variables.get("SECRET").unwrap().is_secret);
     }
 
     #[test]

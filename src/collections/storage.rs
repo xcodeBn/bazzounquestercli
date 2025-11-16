@@ -18,13 +18,14 @@ impl CollectionStorage {
 
     /// Get default storage path
     pub fn default_path() -> crate::Result<PathBuf> {
-        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester")
-            .ok_or_else(|| {
+        let dirs = directories::ProjectDirs::from("com", "bazzoun", "bazzounquester").ok_or_else(
+            || {
                 crate::Error::Io(std::io::Error::new(
                     std::io::ErrorKind::NotFound,
                     "Could not determine data directory",
                 ))
-            })?;
+            },
+        )?;
 
         let path = dirs.data_dir().join("collections");
         Ok(path)
@@ -76,17 +77,17 @@ impl CollectionStorage {
     }
 
     /// Export collection to different formats
-    pub fn export(&self, collection: &Collection, path: &Path, format: ExportFormat) -> crate::Result<()> {
+    pub fn export(
+        &self,
+        collection: &Collection,
+        path: &Path,
+        format: ExportFormat,
+    ) -> crate::Result<()> {
         match format {
-            ExportFormat::Json => {
-                collection.save_to_file(path)
-            }
+            ExportFormat::Json => collection.save_to_file(path),
             ExportFormat::Yaml => {
                 let yaml = serde_yaml::to_string(collection)
-                    .map_err(|e| crate::Error::Io(std::io::Error::new(
-                        std::io::ErrorKind::Other,
-                        e.to_string(),
-                    )))?;
+                    .map_err(|e| crate::Error::Io(std::io::Error::other(e.to_string())))?;
                 std::fs::write(path, yaml)?;
                 Ok(())
             }
@@ -104,10 +105,7 @@ impl CollectionStorage {
             }
             ImportFormat::Yaml => {
                 let collection = serde_yaml::from_str(&content)
-                    .map_err(|e| crate::Error::Io(std::io::Error::new(
-                        std::io::ErrorKind::Other,
-                        e.to_string(),
-                    )))?;
+                    .map_err(|e| crate::Error::Io(std::io::Error::other(e.to_string())))?;
                 Ok(collection)
             }
             ImportFormat::Postman => {

@@ -93,15 +93,13 @@ mod tests {
 
     #[test]
     fn test_script_with_name() {
-        let script = Script::pre_request("test".to_string())
-            .with_name("My Script".to_string());
+        let script = Script::pre_request("test".to_string()).with_name("My Script".to_string());
         assert_eq!(script.name, Some("My Script".to_string()));
     }
 
     #[test]
     fn test_script_with_enabled() {
-        let script = Script::pre_request("test".to_string())
-            .with_enabled(false);
+        let script = Script::pre_request("test".to_string()).with_enabled(false);
         assert!(!script.enabled);
     }
 
@@ -110,8 +108,7 @@ mod tests {
         let enabled = Script::pre_request("test".to_string());
         assert!(enabled.should_execute());
 
-        let disabled = Script::pre_request("test".to_string())
-            .with_enabled(false);
+        let disabled = Script::pre_request("test".to_string()).with_enabled(false);
         assert!(!disabled.should_execute());
 
         let empty = Script::pre_request("  ".to_string());
@@ -120,8 +117,7 @@ mod tests {
 
     #[test]
     fn test_script_serialization() {
-        let script = Script::pre_request("let x = 1;".to_string())
-            .with_name("Test".to_string());
+        let script = Script::pre_request("let x = 1;".to_string()).with_name("Test".to_string());
 
         let json = serde_json::to_string(&script).unwrap();
         let deserialized: Script = serde_json::from_str(&json).unwrap();

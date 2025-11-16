@@ -35,7 +35,7 @@ impl HttpMethod {
     }
 
     /// Parse method from string
-    pub fn from_str(s: &str) -> Result<Self> {
+    pub fn parse(s: &str) -> Result<Self> {
         match s.to_uppercase().as_str() {
             "GET" => Ok(HttpMethod::Get),
             "POST" => Ok(HttpMethod::Post),
@@ -46,6 +46,14 @@ impl HttpMethod {
             "OPTIONS" => Ok(HttpMethod::Options),
             _ => Err(Error::UnsupportedMethod(s.to_string())),
         }
+    }
+}
+
+impl std::str::FromStr for HttpMethod {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        Self::parse(s)
     }
 }
 
@@ -139,8 +147,9 @@ impl RequestBuilder {
                 let header_name = HeaderName::from_bytes(key.as_bytes())
                     .map_err(|_| Error::InvalidHeader(format!("Invalid header name: {}", key)))?;
 
-                let header_value = HeaderValue::from_str(value)
-                    .map_err(|_| Error::InvalidHeader(format!("Invalid header value: {}", value)))?;
+                let header_value = HeaderValue::from_str(value).map_err(|_| {
+                    Error::InvalidHeader(format!("Invalid header value: {}", value))
+                })?;
 
                 header_map.insert(header_name, header_value);
             } else {
@@ -194,6 +203,7 @@ mod tests {
 
     #[test]
     fn test_http_method_from_str() {
+        use std::str::FromStr;
         assert_eq!(HttpMethod::from_str("GET").unwrap(), HttpMethod::Get);
         assert_eq!(HttpMethod::from_str("get").unwrap(), HttpMethod::Get);
         assert_eq!(HttpMethod::from_str("POST").unwrap(), HttpMethod::Post);

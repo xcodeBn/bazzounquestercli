@@ -11,10 +11,7 @@ pub use types::{Script, ScriptType};
 use crate::error::Result;
 
 /// Execute a pre-request script
-pub fn execute_pre_request(
-    script: &Script,
-    context: &mut ScriptContext,
-) -> Result<()> {
+pub fn execute_pre_request(script: &Script, context: &mut ScriptContext) -> Result<()> {
     if script.script_type != ScriptType::PreRequest {
         return Ok(());
     }
@@ -24,10 +21,7 @@ pub fn execute_pre_request(
 }
 
 /// Execute a post-response script
-pub fn execute_post_response(
-    script: &Script,
-    context: &mut ScriptContext,
-) -> Result<()> {
+pub fn execute_post_response(script: &Script, context: &mut ScriptContext) -> Result<()> {
     if script.script_type != ScriptType::PostResponse {
         return Ok(());
     }

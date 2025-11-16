@@ -2,11 +2,10 @@
 
 use crate::assertions::validate_response;
 use crate::env::VariableSubstitutor;
-use crate::error::{Error, Result};
-use crate::http::{HttpClient, HttpMethod, RequestBuilder};
+use crate::error::Result;
+use crate::http::{HttpClient, RequestBuilder};
 use crate::scripts::{execute_post_response, execute_pre_request, ScriptContext};
 use crate::workflow::{RequestChain, StepResult, WorkflowStep};
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
 
@@ -165,11 +164,7 @@ impl WorkflowExecutor {
     }
 
     /// Execute a single step
-    fn execute_step(
-        &self,
-        step: &WorkflowStep,
-        context: &mut ScriptContext,
-    ) -> Result<StepResult> {
+    fn execute_step(&self, step: &WorkflowStep, context: &mut ScriptContext) -> Result<StepResult> {
         let step_start = Instant::now();
 
         // Execute pre-request script

@@ -128,10 +128,7 @@ mod tests {
     #[test]
     fn test_chain_config_with_delay() {
         let config = ChainConfig::new().with_delay(Duration::from_secs(1));
-        assert_eq!(
-            config.delay_between_requests,
-            Some(Duration::from_secs(1))
-        );
+        assert_eq!(config.delay_between_requests, Some(Duration::from_secs(1)));
     }
 
     #[test]
@@ -149,8 +146,8 @@ mod tests {
 
     #[test]
     fn test_request_chain_with_description() {
-        let chain = RequestChain::new("Test".to_string())
-            .with_description("A test chain".to_string());
+        let chain =
+            RequestChain::new("Test".to_string()).with_description("A test chain".to_string());
         assert_eq!(chain.description, Some("A test chain".to_string()));
     }
 
@@ -200,8 +197,8 @@ mod tests {
 
     #[test]
     fn test_chain_serialization() {
-        let chain = RequestChain::new("Test".to_string())
-            .with_description("Test chain".to_string());
+        let chain =
+            RequestChain::new("Test".to_string()).with_description("Test chain".to_string());
 
         let json = serde_json::to_string(&chain).unwrap();
         let deserialized: RequestChain = serde_json::from_str(&json).unwrap();
